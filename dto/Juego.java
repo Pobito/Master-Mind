@@ -12,6 +12,7 @@ import java.util.Random;
 import javax.swing.*;
 
 public class Juego extends JFrame {
+	Random rnd = new Random();
 
 	private JPanel juego;
 	private JPanel nivel;
@@ -25,8 +26,12 @@ public class Juego extends JFrame {
 	private JRadioButton opcion2;
 	private JRadioButton opcion3;
 	private ButtonGroup grupo;
-	
-	public Juego() {		
+	private JTextArea respuesta;
+	private JLabel texto;
+	private Color[] colores = new Color[4];
+	private Color[] coloresDisponibles;
+
+	public Juego() {
 		setTitle("Selector de nivel");
 		setBounds(100, 100, 450, 400);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -34,24 +39,25 @@ public class Juego extends JFrame {
 		nivel = new JPanel();
 		nivel.setLayout(null);
 		setContentPane(nivel);
-		
+
 		opcion1 = new JRadioButton("Principiante", true);
-		opcion1.setBounds(38,63,109,23);
+		opcion1.setBounds(38, 63, 109, 23);
 		nivel.add(opcion1);
 		opcion2 = new JRadioButton("Medio", false);
-		opcion2.setBounds(38,89,109,23);
+		opcion2.setBounds(38, 89, 109, 23);
 		nivel.add(opcion2);
 		opcion3 = new JRadioButton("Avanzado", false);
-		opcion3.setBounds(38,115,109,23);
+		opcion3.setBounds(38, 115, 109, 23);
 		nivel.add(opcion3);
-		
+
 		grupo = new ButtonGroup();
 		grupo.add(opcion1);
 		grupo.add(opcion2);
 		grupo.add(opcion3);
-		
+
 		ActionListener al = new ActionListener() {
-			public void actionPerformed (ActionEvent e) {
+			public void actionPerformed(ActionEvent e) {
+				
 				setTitle("Juego");
 				setBounds(100, 100, 550, 500);
 				setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -59,7 +65,18 @@ public class Juego extends JFrame {
 				juego = new JPanel();
 				juego.setLayout(null);
 				setContentPane(juego);
-				
+
+				if (opcion2.isSelected()) {
+					coloresDisponibles = new Color[5];
+					coloresDisponibles[4] = new Color(rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+				} else if (opcion3.isSelected()) {
+					coloresDisponibles = new Color[6];
+					coloresDisponibles[4] = new Color(rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+					coloresDisponibles[5] = new Color(rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+				} else {
+					coloresDisponibles = new Color[4];
+				}
+
 				// Barra menu
 				JMenuBar menu = new JMenuBar();
 				setJMenuBar(menu);
@@ -131,20 +148,21 @@ public class Juego extends JFrame {
 				comoJugar.add(puntuacion);
 				puntuacion.addActionListener(new ActionListener() { // Cuando clique mostrara el sistema seleccionado
 					public void actionPerformed(ActionEvent e) {
-						JOptionPane.showMessageDialog(null, "La forma de puntuación es bastante sencilla: se puede convenir antes de\r\n"
-								+ "empezar de cuantos juegos va a ser la partida, cada jugador tiene un color\r\n"
-								+ "distinto de espiga de tanteo, rojo o azul, que colocará en el número 1 de la fila\r\n"
-								+ "vertical de tanteo.\r\n"
-								+ "Al final de cada juego, el jugador que ha creado el código ganará tantos\r\n"
-								+ "puntos como filas haya cubierto el oponente hasta que ha conseguido descifrar\r\n"
-								+ "el código. Es decir, si ha necesitado probar 7 combinaciones distintas antes de\r\n"
-								+ "acertar, estos son los puntos que gana el jugador contrario, que se anotarán\r\n"
-								+ "cambiando la posición de la clavija de tanteo correspondiente.\r\n"
-								+ "En el caso de que el jugador que ha creado el código se equivoque al\r\n"
-								+ "dar las pistas con las espigas blancas y negras, deberá repetir la serie y\r\n"
-								+ "además tendrá que dar 3 puntos al jugador contrario. Los jugadores se\r\n"
-								+ "alternarán para crear el código secreto e irán anotando sus puntuaciones con\r\n"
-								+ "las espigas de tanteo hasta terminar la partida.");
+						JOptionPane.showMessageDialog(null,
+								"La forma de puntuación es bastante sencilla: se puede convenir antes de\r\n"
+										+ "empezar de cuantos juegos va a ser la partida, cada jugador tiene un color\r\n"
+										+ "distinto de espiga de tanteo, rojo o azul, que colocará en el número 1 de la fila\r\n"
+										+ "vertical de tanteo.\r\n"
+										+ "Al final de cada juego, el jugador que ha creado el código ganará tantos\r\n"
+										+ "puntos como filas haya cubierto el oponente hasta que ha conseguido descifrar\r\n"
+										+ "el código. Es decir, si ha necesitado probar 7 combinaciones distintas antes de\r\n"
+										+ "acertar, estos son los puntos que gana el jugador contrario, que se anotarán\r\n"
+										+ "cambiando la posición de la clavija de tanteo correspondiente.\r\n"
+										+ "En el caso de que el jugador que ha creado el código se equivoque al\r\n"
+										+ "dar las pistas con las espigas blancas y negras, deberá repetir la serie y\r\n"
+										+ "además tendrá que dar 3 puntos al jugador contrario. Los jugadores se\r\n"
+										+ "alternarán para crear el código secreto e irán anotando sus puntuaciones con\r\n"
+										+ "las espigas de tanteo hasta terminar la partida.");
 					}
 				});
 
@@ -156,42 +174,74 @@ public class Juego extends JFrame {
 				acercaDe.add(consisteJuego);
 				consisteJuego.addActionListener(new ActionListener() { // Cuando clique mostrara el sistema seleccionado
 					public void actionPerformed(ActionEvent e) {
-						JOptionPane.showMessageDialog(null, "Mastermind es un juego de habilidad y lógica que consiste en descubrir\r\n"
-								+ "una secuencia de colores oculta. Es un clásico que lleva muchos años en el\r\n"
-								+ "mercado.");
+						JOptionPane.showMessageDialog(null,
+								"Mastermind es un juego de habilidad y lógica que consiste en descubrir\r\n"
+										+ "una secuencia de colores oculta. Es un clásico que lleva muchos años en el\r\n"
+										+ "mercado.");
 					}
 				});
-
 
 				JMenuItem programadores = new JMenuItem("Programadores");
 				acercaDe.add(programadores);
 				programadores.addActionListener(new ActionListener() { // Cuando clique mostrara el sistema seleccionado
 					public void actionPerformed(ActionEvent e) {
-						JOptionPane.showMessageDialog(null, "Adrián Pobo \nAnna Marín \nSergio Aragón");
+						JOptionPane.showMessageDialog(null, "Adrián Pobo\nAnna Marín\nSergio Aragón");
 					}
 				});
-				
+
 				boton = new JButton("Seleccionar");
-				boton.setBounds(10,52,215,47);
+				boton.setBounds(209, 59, 115, 30);
 				juego.add(boton);
 				boton.addActionListener(new ActionListener() {
-					public void actionPerformed (ActionEvent e) {
-						color = selector.showDialog(null, "Seleccione un color", color);
-						juego.setBackground(color);
-						System.out.println(color);
+					public void actionPerformed(ActionEvent e) {
+						for (int i = 0, x = 415; i < colores.length; i++, x += 30) {
+							color = selector.showDialog(null, "Seleccione un color", color);
+							colores[i] = (color);
+							coloresDisponibles[i] = (color);
+							if (colores[i] == null) {
+								i--;
+								x -= 30;
+							} else {
+								respuesta = new JTextArea();
+								respuesta.setBounds(x, 110, 20, 20);
+								respuesta.setEditable(false); // Para que no se pueda escribir en él
+								respuesta.setBackground(colores[i]);
+								juego.add(respuesta);
+							}
+						}
+						
+						// Para randomizar el array
+						for (int j = 0; j < coloresDisponibles.length; j++) {
+							int index = rnd.nextInt(coloresDisponibles.length);
+							Color temp = coloresDisponibles[j];
+							coloresDisponibles[j] = coloresDisponibles[index];
+							coloresDisponibles[index] = temp;
+						}
+						
+						// Para pintar colores disponibles
+						for (int i = 0, x = 415; i < coloresDisponibles.length; i++, x += 30) {
+							respuesta = new JTextArea();
+							respuesta.setBounds(x, 50, 20, 20);
+							respuesta.setEditable(false); // Para que no se pueda escribir en él
+							respuesta.setBackground(coloresDisponibles[i]);
+							juego.add(respuesta);
+						}
+						texto = new JLabel("");
+						texto.setBounds(400, 25, 200, 55);
+						juego.add(texto);
+						texto.setBorder(BorderFactory.createTitledBorder("Colores Disponibles"));
+
+						texto = new JLabel("");
+						texto.setBounds(400, 85, 200, 55);
+						juego.add(texto);
+						texto.setBorder(BorderFactory.createTitledBorder("Solución"));
+						juego.remove(boton);
 					}
 				});
 			}
 		};
-		
-		aceptar = new JButton("Aceptar");
-		aceptar.setBounds(209,59,95,30);
-		nivel.add(aceptar);
-		aceptar.addActionListener(al);
-		
-		cancelar = new JButton("Cancelar");
-		cancelar.setBounds(209,111,95,30);
-		nivel.add(cancelar);
-		cancelar.addActionListener(al);
-	}
-}
+
+	aceptar=new JButton("Aceptar");aceptar.setBounds(209,59,95,30);nivel.add(aceptar);aceptar.addActionListener(al);
+
+	cancelar=new JButton("Cancelar");cancelar.setBounds(209,111,95,30);nivel.add(cancelar);cancelar.addActionListener(al);
+}}
