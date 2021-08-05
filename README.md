@@ -1,1 +1,1 @@
-# Mister-Mind
+# Master-Mind
