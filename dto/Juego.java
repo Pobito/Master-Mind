@@ -7,9 +7,12 @@ import java.awt.Graphics2D;
 import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.Random;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 
 public class Juego extends JFrame {
 	Random rnd = new Random();
@@ -30,6 +33,33 @@ public class Juego extends JFrame {
 	private JLabel texto;
 	private Color[] colores = new Color[4];
 	private Color[] coloresDisponibles;
+	int num = 0;
+	
+	public Color nextColor(int index) {
+		
+		if (index >= coloresDisponibles.length) {
+			num = 0;
+			return coloresDisponibles[num];
+		}
+		
+		else {
+			return coloresDisponibles[num];
+		}
+		
+	}
+	
+	public Color prevColor(int index) {
+		
+		if (index == -1) {
+			num = coloresDisponibles.length-1;
+			return coloresDisponibles[num];
+		}
+		
+		else {
+			return coloresDisponibles[num];
+		}
+		
+	}
 
 	public Juego() {
 		setTitle("Selector de nivel");
@@ -54,6 +84,8 @@ public class Juego extends JFrame {
 		grupo.add(opcion1);
 		grupo.add(opcion2);
 		grupo.add(opcion3);
+		
+		
 
 		ActionListener al = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -236,8 +268,51 @@ public class Juego extends JFrame {
 						juego.add(texto);
 						texto.setBorder(BorderFactory.createTitledBorder("Solución"));
 						juego.remove(boton);
+						
+						for (int i= 0, x = 100; i < 4; i++, x+=30) {
+							
+							final JTextArea txtarea = new JTextArea();
+							txtarea.setBounds(x, 100, 24, 24);
+							txtarea.setBackground(coloresDisponibles[i]);
+							txtarea.setBorder(new LineBorder(Color.BLACK, 2));
+							txtarea.setEditable(false);
+							
+							txtarea.addMouseListener(new MouseListener() {
+								public void mouseClicked(MouseEvent e) {
+									
+									if (e.getButton() == MouseEvent.BUTTON1) {
+										num++;
+										txtarea.setBackground(nextColor(num));
+									}
+									
+									if (e.getButton() == MouseEvent.BUTTON3) {
+										num--;
+										txtarea.setBackground(prevColor(num));
+									}
+
+								}
+
+								@Override
+								public void mousePressed(MouseEvent e) {
+								}
+								@Override
+								public void mouseReleased(MouseEvent e) {
+								}
+								@Override
+								public void mouseEntered(MouseEvent e) {
+								}
+								@Override
+								public void mouseExited(MouseEvent e) {
+								}
+							});
+							juego.add(txtarea);
+							
+						}
+						
 					}
 				});
+				
+				
 			}
 		};
 
