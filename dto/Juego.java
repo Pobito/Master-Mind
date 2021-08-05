@@ -167,7 +167,7 @@ public class Juego extends JFrame {
 				acercaDe.add(programadores);
 				programadores.addActionListener(new ActionListener() { // Cuando clique mostrara el sistema seleccionado
 					public void actionPerformed(ActionEvent e) {
-						JOptionPane.showMessageDialog(null, "Arián Pobo \nAnna Marín \nSergio Aragón");
+						JOptionPane.showMessageDialog(null, "Adrián Pobo \nAnna Marín \nSergio Aragón");
 					}
 				});
 				
