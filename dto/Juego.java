@@ -1,10 +1,6 @@
 package dto;
 
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -16,59 +12,39 @@ import javax.swing.border.LineBorder;
 
 public class Juego extends JFrame {
 	Random rnd = new Random();
-	Thread b = new Thread();
-	
-	private JPanel juego;
-	private JPanel nivel;
+
+	private JPanel juego, nivel;
 	private JColorChooser selector;
 	private Color color;
-	private JButton boton;
-	private JLabel etiqueta;
-	private JButton aceptar;
-	private JButton cancelar;
-	private JRadioButton opcion1;
-	private JRadioButton opcion2;
-	private JRadioButton opcion3;
+	private JButton boton, aceptar, cancelar, comprobar;
+	private JRadioButton opcion1, opcion2, opcion3;
 	private ButtonGroup grupo;
-	private JTextArea respuesta;
+	private JTextArea respuesta, cuadrado1, cuadrado2, cuadrado3,cuadrado4;
 	private JLabel texto;
 	private Color[] colores = new Color[4]; // Colores de la solucion
 	private Color[] coloresDisponibles;
 	private Color[] coloresUsuario = new Color[4];
 	private Color[] coloresAux;
-	private int num = 0;
-	private int x;
-	private JTextArea cuadrado1;
-	private JTextArea cuadrado2;
-	private JTextArea cuadrado3;
-	private JTextArea cuadrado4;
-	private JButton comprobar;
-	private int intentos;
+	private int num = 0, x, y = 10, intentos;
 
 	public Color nextColor(int index) {
-
 		if (index >= coloresDisponibles.length) {
 			num = 0;
 			return coloresDisponibles[num];
 		}
-
 		else {
 			return coloresDisponibles[num];
 		}
-
 	}
 
 	public Color prevColor(int index) {
-
 		if (index == -1) {
 			num = coloresDisponibles.length - 1;
 			return coloresDisponibles[num];
 		}
-
 		else {
 			return coloresDisponibles[num];
 		}
-
 	}
 
 	public Juego() {
@@ -247,7 +223,7 @@ public class Juego extends JFrame {
 				boton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						for (int i = 0, x = 615; i < colores.length; i++, x += 30) {
-							color = selector.showDialog(null, "Seleccione un color", color);
+							color = selector.showDialog(null, "Seleccione un color", null);
 							colores[i] = (color);
 							coloresAux[i] = color;
 							coloresDisponibles[i] = (color);
@@ -259,6 +235,7 @@ public class Juego extends JFrame {
 								respuesta.setBounds(x, 110, 20, 20);
 								respuesta.setEditable(false); // Para que no se pueda escribir en él
 								respuesta.setBackground(colores[i]);
+								respuesta.setVisible(false);
 								juego.add(respuesta);
 							}
 						}
@@ -290,220 +267,224 @@ public class Juego extends JFrame {
 						texto.setBorder(BorderFactory.createTitledBorder("Solución"));
 						juego.remove(boton);
 
-//						do {
-							cuadrado1 = new JTextArea();
-							cuadrado1.setBounds(10, 100, 24, 24);
-							cuadrado1.setBackground(Color.white);
-							cuadrado1.setBorder(new LineBorder(Color.BLACK, 2));
-							cuadrado1.setEditable(false);
-							cuadrado1.addMouseListener(new MouseListener() {
-								public void mouseClicked(MouseEvent e) {
+						cuadrado1 = new JTextArea();
+						cuadrado1.setBounds(10, 10, 24, 24);
+						cuadrado1.setBackground(Color.white);
+						cuadrado1.setBorder(new LineBorder(Color.BLACK, 2));
+						cuadrado1.setEditable(false);
+						cuadrado1.addMouseListener(new MouseListener() {
+							public void mouseClicked(MouseEvent e) {
 
-									if (e.getButton() == MouseEvent.BUTTON1) {
-										num++;
-										cuadrado1.setBackground(nextColor(num));
+								if (e.getButton() == MouseEvent.BUTTON1) {
+									num++;
+									cuadrado1.setBackground(nextColor(num));
+								}
+
+								if (e.getButton() == MouseEvent.BUTTON3) {
+									num--;
+									cuadrado1.setBackground(prevColor(num));
+								}
+
+							}
+
+							@Override
+							public void mousePressed(MouseEvent e) {
+							}
+
+							@Override
+							public void mouseReleased(MouseEvent e) {
+							}
+
+							@Override
+							public void mouseEntered(MouseEvent e) {
+							}
+
+							@Override
+							public void mouseExited(MouseEvent e) {
+							}
+						});
+
+						cuadrado2 = new JTextArea();
+						cuadrado2.setBounds(40, 10, 24, 24);
+						cuadrado2.setBackground(Color.white);
+						cuadrado2.setBorder(new LineBorder(Color.BLACK, 2));
+						cuadrado2.setEditable(false);
+						cuadrado2.addMouseListener(new MouseListener() {
+							public void mouseClicked(MouseEvent e) {
+
+								if (e.getButton() == MouseEvent.BUTTON1) {
+									num++;
+									cuadrado2.setBackground(nextColor(num));
+								}
+
+								if (e.getButton() == MouseEvent.BUTTON3) {
+									num--;
+									cuadrado2.setBackground(prevColor(num));
+								}
+							}
+
+							@Override
+							public void mousePressed(MouseEvent e) {
+							}
+
+							@Override
+							public void mouseReleased(MouseEvent e) {
+							}
+
+							@Override
+							public void mouseEntered(MouseEvent e) {
+							}
+
+							@Override
+							public void mouseExited(MouseEvent e) {
+							}
+						});
+
+						cuadrado3 = new JTextArea();
+						cuadrado3.setBounds(70, 10, 24, 24);
+						cuadrado3.setBackground(Color.white);
+						cuadrado3.setBorder(new LineBorder(Color.BLACK, 2));
+						cuadrado3.setEditable(false);
+						cuadrado3.addMouseListener(new MouseListener() {
+							public void mouseClicked(MouseEvent e) {
+
+								if (e.getButton() == MouseEvent.BUTTON1) {
+									num++;
+									cuadrado3.setBackground(nextColor(num));
+								}
+
+								if (e.getButton() == MouseEvent.BUTTON3) {
+									num--;
+									cuadrado3.setBackground(prevColor(num));
+								}
+
+							}
+
+							@Override
+							public void mousePressed(MouseEvent e) {
+							}
+
+							@Override
+							public void mouseReleased(MouseEvent e) {
+							}
+
+							@Override
+							public void mouseEntered(MouseEvent e) {
+							}
+
+							@Override
+							public void mouseExited(MouseEvent e) {
+							}
+						});
+
+						cuadrado4 = new JTextArea();
+						cuadrado4.setBounds(100, 10, 24, 24);
+						cuadrado4.setBackground(Color.white);
+						cuadrado4.setBorder(new LineBorder(Color.BLACK, 2));
+						cuadrado4.setEditable(false);
+						cuadrado4.addMouseListener(new MouseListener() {
+							public void mouseClicked(MouseEvent e) {
+
+								if (e.getButton() == MouseEvent.BUTTON1) {
+									num++;
+									cuadrado4.setBackground(nextColor(num));
+								}
+
+								if (e.getButton() == MouseEvent.BUTTON3) {
+									num--;
+									cuadrado4.setBackground(prevColor(num));
+								}
+
+							}
+
+							@Override
+							public void mousePressed(MouseEvent e) {
+							}
+
+							@Override
+							public void mouseReleased(MouseEvent e) {
+							}
+
+							@Override
+							public void mouseEntered(MouseEvent e) {
+							}
+
+							@Override
+							public void mouseExited(MouseEvent e) {
+							}
+						});
+
+						juego.add(cuadrado1);
+						juego.add(cuadrado2);
+						juego.add(cuadrado3);
+						juego.add(cuadrado4);
+
+						comprobar = new JButton("Comprobar");
+						comprobar.setBounds(140, 10, 100, 24);
+						juego.add(comprobar);
+						comprobar.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent e) {
+
+								int negra = 0, blancas = 0, i;
+								coloresUsuario[0] = cuadrado1.getBackground();
+								coloresUsuario[1] = cuadrado2.getBackground();
+								coloresUsuario[2] = cuadrado3.getBackground();
+								coloresUsuario[3] = cuadrado4.getBackground();
+
+								// Para ver cuantas negras hay
+								for (i = 0; i < coloresUsuario.length; i++) {
+									if (coloresUsuario[i] == colores[i]) {
+										coloresAux[i] = Color.white;
+										negra++;
 									}
-
-									if (e.getButton() == MouseEvent.BUTTON3) {
-										num--;
-										cuadrado1.setBackground(prevColor(num));
-									}
-
 								}
-
-								@Override
-								public void mousePressed(MouseEvent e) {
-								}
-
-								@Override
-								public void mouseReleased(MouseEvent e) {
-								}
-
-								@Override
-								public void mouseEntered(MouseEvent e) {
-								}
-
-								@Override
-								public void mouseExited(MouseEvent e) {
-								}
-							});
-
-							cuadrado2 = new JTextArea();
-							cuadrado2.setBounds(40, 100, 24, 24);
-							cuadrado2.setBackground(Color.white);
-							cuadrado2.setBorder(new LineBorder(Color.BLACK, 2));
-							cuadrado2.setEditable(false);
-							cuadrado2.addMouseListener(new MouseListener() {
-								public void mouseClicked(MouseEvent e) {
-
-									if (e.getButton() == MouseEvent.BUTTON1) {
-										num++;
-										cuadrado2.setBackground(nextColor(num));
-									}
-
-									if (e.getButton() == MouseEvent.BUTTON3) {
-										num--;
-										cuadrado2.setBackground(prevColor(num));
-									}
-								}
-
-								@Override
-								public void mousePressed(MouseEvent e) {
-								}
-
-								@Override
-								public void mouseReleased(MouseEvent e) {
-								}
-
-								@Override
-								public void mouseEntered(MouseEvent e) {
-								}
-
-								@Override
-								public void mouseExited(MouseEvent e) {
-								}
-							});
-
-							cuadrado3 = new JTextArea();
-							cuadrado3.setBounds(70, 100, 24, 24);
-							cuadrado3.setBackground(Color.white);
-							cuadrado3.setBorder(new LineBorder(Color.BLACK, 2));
-							cuadrado3.setEditable(false);
-							cuadrado3.addMouseListener(new MouseListener() {
-								public void mouseClicked(MouseEvent e) {
-
-									if (e.getButton() == MouseEvent.BUTTON1) {
-										num++;
-										cuadrado3.setBackground(nextColor(num));
-									}
-
-									if (e.getButton() == MouseEvent.BUTTON3) {
-										num--;
-										cuadrado3.setBackground(prevColor(num));
-									}
-
-								}
-
-								@Override
-								public void mousePressed(MouseEvent e) {
-								}
-
-								@Override
-								public void mouseReleased(MouseEvent e) {
-								}
-
-								@Override
-								public void mouseEntered(MouseEvent e) {
-								}
-
-								@Override
-								public void mouseExited(MouseEvent e) {
-								}
-							});
-
-							cuadrado4 = new JTextArea();
-							cuadrado4.setBounds(100, 100, 24, 24);
-							cuadrado4.setBackground(Color.white);
-							cuadrado4.setBorder(new LineBorder(Color.BLACK, 2));
-							cuadrado4.setEditable(false);
-							cuadrado4.addMouseListener(new MouseListener() {
-								public void mouseClicked(MouseEvent e) {
-
-									if (e.getButton() == MouseEvent.BUTTON1) {
-										num++;
-										cuadrado4.setBackground(nextColor(num));
-									}
-
-									if (e.getButton() == MouseEvent.BUTTON3) {
-										num--;
-										cuadrado4.setBackground(prevColor(num));
-									}
-
-								}
-
-								@Override
-								public void mousePressed(MouseEvent e) {
-								}
-
-								@Override
-								public void mouseReleased(MouseEvent e) {
-								}
-
-								@Override
-								public void mouseEntered(MouseEvent e) {
-								}
-
-								@Override
-								public void mouseExited(MouseEvent e) {
-								}
-							});
-
-							juego.add(cuadrado1);
-							juego.add(cuadrado2);
-							juego.add(cuadrado3);
-							juego.add(cuadrado4);
-
-//							try {
-//								b.wait();
-//							} catch (InterruptedException e1) {
-//								// TODO Auto-generated catch block
-//								e1.printStackTrace();
-//							}
-							comprobar = new JButton("Comprobar");
-							comprobar.setBounds(140, 100, 100, 24);
-							juego.add(comprobar);
-							comprobar.addActionListener(new ActionListener() {
-								public void actionPerformed(ActionEvent e) {
-									int negra = 0, blancas = 0, i;
-									coloresUsuario[0] = cuadrado1.getBackground();
-									coloresUsuario[1] = cuadrado2.getBackground();
-									coloresUsuario[2] = cuadrado3.getBackground();
-									coloresUsuario[3] = cuadrado4.getBackground();
-									
-									// Para ver cuantas negras hay
-									for (i = 0; i < coloresUsuario.length; i++) {
-										if (coloresUsuario[i] == colores[i]) {
-											coloresAux[i] = Color.white;
-											negra++;
+								// Comprobamos cuantas blancas hay
+								for (i = 0; i < colores.length; i++) {
+									for (int j = 0; j < colores.length; j++) {
+										if (coloresUsuario[i] == coloresAux[j]) {
+											blancas++;
 										}
 									}
-									// Comprobamos cuantas blancas hay
-									for (i = 0; i < colores.length; i++) {
-										for (int j = 0; j < colores.length; j++) {
-											if (coloresUsuario[i] == coloresAux[j]) {
-												blancas++;
-											}
-										}
+								}
+
+								if (negra == colores.length) {
+									JOptionPane.showMessageDialog(null, "Has ganado");
+									System.exit(0);
+								} else {
+									intentos--;
+									y += 50;
+									for (i = 0, x = 260; i < (negra); i++, x += 44) {
+										JTextArea holi = new JTextArea();
+										holi.setBounds(x, y, 24, 24);
+										holi.setBackground(Color.black);
+										holi.setBorder(new LineBorder(Color.BLACK, 2));
+										holi.setEditable(false);
+										juego.add(holi);
 									}
-									System.out.println(blancas + " " + negra);
-									if (negra == colores.length) {
-										JOptionPane.showMessageDialog(null, "Has ganado");
+									for (i = 0, x = 260; i < (blancas); i++, x += 44) {
+										final JTextArea holi = new JTextArea();
+										holi.setBounds(x, y, 24, 24);
+										holi.setBackground(Color.white);
+										holi.setBorder(new LineBorder(Color.BLACK, 2));
+										holi.setEditable(false);
+										juego.add(holi);
+									}
+									for (i = 0, x = 10; i < coloresUsuario.length; i++, x += 30) {
+										final JTextArea holi = new JTextArea();
+										holi.setBounds(x, y, 24, 24);
+										holi.setBackground(coloresUsuario[i]);
+										holi.setBorder(new LineBorder(Color.BLACK, 2));
+										holi.setEditable(false);
+										juego.add(holi);
+									}
+									if (intentos == 0) {
+										JOptionPane.showMessageDialog(null, "Has perdido");
 										System.exit(0);
 									}
-									else {
-										System.out.println("SEX");
-										for (i = 0, x = 260; i < (negra); i++, x += 44) {
-											System.out.println("Negro");
-											JTextArea holi = new JTextArea();
-											holi.setBounds(x, 100, 24, 24);
-											holi.setBackground(Color.black);
-											holi.setEditable(false);
-											juego.add(holi);
-										}
-										for (i = 0; i < (blancas); i++, x += 44) {
-											final JTextArea holi = new JTextArea();
-											holi.setBounds(x, 100, 24, 24);
-											holi.setBackground(Color.white);
-											holi.setEditable(false);
-											juego.add(holi);
-											intentos--;
-										}
-//										juego.remove(boton);
-									}
 								}
-							});
-//						} while (intentos !=0);
-						
+							}
+						});
+
 					}
 
 				});
