@@ -123,7 +123,7 @@ public class Juego extends JFrame {
 
 				JMenuItem salir = new JMenuItem("Salir");
 				menuArchivo.add(salir);
-				salir.addActionListener(new ActionListener() { // Cuando clique mostrara el sistema seleccionado
+				salir.addActionListener(new ActionListener() { // Cuando clique saldra del juego
 					public void actionPerformed(ActionEvent e) {
 						System.exit(0);
 					}
@@ -138,7 +138,7 @@ public class Juego extends JFrame {
 
 				JMenuItem elementos = new JMenuItem("Elementos del juego");
 				comoJugar.add(elementos);
-				elementos.addActionListener(new ActionListener() { // Cuando clique mostrara el sistema seleccionado
+				elementos.addActionListener(new ActionListener() { // Cuando clique mostrara los elementos
 					public void actionPerformed(ActionEvent e) {
 						JOptionPane.showMessageDialog(null,
 								"Tablero compuesto por:\r\n"
@@ -158,7 +158,7 @@ public class Juego extends JFrame {
 
 				JMenuItem comoSeJuega = new JMenuItem("Como se juega");
 				comoJugar.add(comoSeJuega);
-				comoSeJuega.addActionListener(new ActionListener() { // Cuando clique mostrara el sistema seleccionado
+				comoSeJuega.addActionListener(new ActionListener() { // Cuando clique mostrara como se juega
 					public void actionPerformed(ActionEvent e) {
 						JOptionPane.showMessageDialog(null,
 								"En Mastermind compiten 2 jugadores, uno de ellos creará un código\r\n"
@@ -178,7 +178,7 @@ public class Juego extends JFrame {
 
 				JMenuItem puntuacion = new JMenuItem("Puntuación");
 				comoJugar.add(puntuacion);
-				puntuacion.addActionListener(new ActionListener() { // Cuando clique mostrara el sistema seleccionado
+				puntuacion.addActionListener(new ActionListener() { // Cuando clique mostrara el sistema de puntucación
 					public void actionPerformed(ActionEvent e) {
 						JOptionPane.showMessageDialog(null,
 								"La forma de puntuación es bastante sencilla: se puede convenir antes de\r\n"
@@ -204,7 +204,7 @@ public class Juego extends JFrame {
 
 				JMenuItem consisteJuego = new JMenuItem("En que consiste el juego?");
 				acercaDe.add(consisteJuego);
-				consisteJuego.addActionListener(new ActionListener() { // Cuando clique mostrara el sistema seleccionado
+				consisteJuego.addActionListener(new ActionListener() { /
 					public void actionPerformed(ActionEvent e) {
 						JOptionPane.showMessageDialog(null,
 								"Mastermind es un juego de habilidad y lógica que consiste en descubrir\r\n"
@@ -215,7 +215,7 @@ public class Juego extends JFrame {
 
 				JMenuItem programadores = new JMenuItem("Programadores");
 				acercaDe.add(programadores);
-				programadores.addActionListener(new ActionListener() { // Cuando clique mostrara el sistema seleccionado
+				programadores.addActionListener(new ActionListener() { // Creadores
 					public void actionPerformed(ActionEvent e) {
 						JOptionPane.showMessageDialog(null, "Adrián Pobo\nAnna Marín\nSergio Aragón");
 					}
