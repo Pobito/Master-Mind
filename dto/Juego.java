@@ -19,8 +19,9 @@ public class Juego extends JFrame {
 	private JButton boton, aceptar, cancelar, comprobar;
 	private JRadioButton opcion1, opcion2, opcion3;
 	private ButtonGroup grupo;
-	private JTextArea respuesta, cuadrado1, cuadrado2, cuadrado3,cuadrado4;
+	private JTextArea texArea, cuadrado1, cuadrado2, cuadrado3,cuadrado4;
 	private JLabel texto;
+	private JTextArea[] respuesta = new JTextArea[4];
 	private Color[] colores = new Color[4]; // Colores de la solucion
 	private Color[] coloresDisponibles;
 	private Color[] coloresUsuario = new Color[4];
@@ -231,12 +232,12 @@ public class Juego extends JFrame {
 								i--;
 								x -= 30;
 							} else {
-								respuesta = new JTextArea();
-								respuesta.setBounds(x, 110, 20, 20);
-								respuesta.setEditable(false); // Para que no se pueda escribir en él
-								respuesta.setBackground(colores[i]);
-								respuesta.setVisible(false);
-								juego.add(respuesta);
+								respuesta[i] = new JTextArea();
+								respuesta[i].setBounds(x, 110, 20, 20);
+								respuesta[i].setEditable(false); // Para que no se pueda escribir en él
+								respuesta[i].setBackground(colores[i]);
+								respuesta[i].setVisible(false);
+								juego.add(respuesta[i]);
 							}
 						}
 
@@ -250,11 +251,11 @@ public class Juego extends JFrame {
 
 						// Para pintar colores disponibles
 						for (int i = 0, x = 615; i < coloresDisponibles.length; i++, x += 30) {
-							respuesta = new JTextArea();
-							respuesta.setBounds(x, 50, 20, 20);
-							respuesta.setEditable(false); // Para que no se pueda escribir en él
-							respuesta.setBackground(coloresDisponibles[i]);
-							juego.add(respuesta);
+							texArea = new JTextArea();
+							texArea.setBounds(x, 50, 20, 20);
+							texArea.setEditable(false); // Para que no se pueda escribir en él
+							texArea.setBackground(coloresDisponibles[i]);
+							juego.add(texArea);
 						}
 						texto = new JLabel("");
 						texto.setBounds(600, 25, 200, 55);
@@ -478,8 +479,12 @@ public class Juego extends JFrame {
 										juego.add(holi);
 									}
 									if (intentos == 0) {
+										for (i = 0; i < coloresUsuario.length; i++) {
+											respuesta[i].setVisible(true);
+                                        }
 										JOptionPane.showMessageDialog(null, "Has perdido");
-										System.exit(0);
+										
+//										System.exit(0);
 									}
 								}
 							}
