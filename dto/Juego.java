@@ -1,6 +1,8 @@
 package dto;
 
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Event;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -13,13 +15,14 @@ import javax.swing.border.LineBorder;
 public class Juego extends JFrame {
 	Random rnd = new Random();
 
-	private JPanel juego, nivel;
+	private JPanel juego;
 	private JColorChooser selector;
 	private Color color;
+	private JScrollPane scroll;
 	private JButton boton, aceptar, cancelar, comprobar;
 	private JRadioButton opcion1, opcion2, opcion3;
 	private ButtonGroup grupo;
-	private JTextArea texArea, cuadrado1, cuadrado2, cuadrado3,cuadrado4;
+	private JTextArea texArea, cuadrado1, cuadrado2, cuadrado3, cuadrado4;
 	private JLabel texto;
 	private JTextArea[] respuesta = new JTextArea[4];
 	private Color[] colores = new Color[4]; // Colores de la solucion
@@ -32,8 +35,7 @@ public class Juego extends JFrame {
 		if (index >= coloresDisponibles.length) {
 			num = 0;
 			return coloresDisponibles[num];
-		}
-		else {
+		} else {
 			return coloresDisponibles[num];
 		}
 	}
@@ -42,30 +44,30 @@ public class Juego extends JFrame {
 		if (index == -1) {
 			num = coloresDisponibles.length - 1;
 			return coloresDisponibles[num];
-		}
-		else {
+		} else {
 			return coloresDisponibles[num];
 		}
 	}
 
 	public Juego() {
-		setTitle("Selector de nivel");
-		setBounds(100, 100, 450, 400);
+		setTitle("Juego");
+		setBounds(100, 100, 850, 500);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
-		nivel = new JPanel();
-		nivel.setLayout(null);
-		setContentPane(nivel);
+		juego = new JPanel();
+		juego.setLayout(null);
+		setContentPane(juego);
 
+		// Creamos las 3 opciones para el selector de nivel
 		opcion1 = new JRadioButton("Principiante", true);
 		opcion1.setBounds(38, 63, 109, 23);
-		nivel.add(opcion1);
+		juego.add(opcion1);
 		opcion2 = new JRadioButton("Medio", false);
 		opcion2.setBounds(38, 89, 109, 23);
-		nivel.add(opcion2);
+		juego.add(opcion2);
 		opcion3 = new JRadioButton("Avanzado", false);
 		opcion3.setBounds(38, 115, 109, 23);
-		nivel.add(opcion3);
+		juego.add(opcion3);
 
 		grupo = new ButtonGroup();
 		grupo.add(opcion1);
@@ -74,23 +76,16 @@ public class Juego extends JFrame {
 
 		ActionListener al = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
-				setTitle("Juego");
-				setBounds(100, 100, 850, 500);
-				setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				setVisible(true);
-				juego = new JPanel();
-				juego.setLayout(null);
-				setContentPane(juego);
+				juego.removeAll(); // Para quitar el menu del nivel
 
 				// nivel Medio
 				if (opcion2.isSelected()) {
-					coloresDisponibles = new Color[5];
-					coloresAux = new Color[5];
-					coloresDisponibles[4] = new Color(rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+					coloresDisponibles = new Color[5]; // Array con 5 colores disponible
+					coloresAux = new Color[5]; // Array para mezclarlos 
+					coloresDisponibles[4] = new Color(rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256)); // Generamos un color random
 					coloresAux[4] = coloresDisponibles[4];
-					intentos = 8;
-					// Nivel avanzado
+					intentos = 8; // Num de intentos
+				// Nivel avanzado
 				} else if (opcion3.isSelected()) {
 					coloresDisponibles = new Color[6];
 					coloresAux = new Color[6];
@@ -99,7 +94,7 @@ public class Juego extends JFrame {
 					coloresDisponibles[5] = new Color(rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
 					coloresAux[5] = coloresDisponibles[5];
 					intentos = 6;
-					// Nivel principiante (por defecto)
+				// Nivel principiante (por defecto)
 				} else {
 					coloresDisponibles = new Color[4];
 					coloresAux = new Color[4];
@@ -117,6 +112,13 @@ public class Juego extends JFrame {
 				// items
 				JMenuItem nuevoJuego = new JMenuItem("Nuevo juego");
 				menuArchivo.add(nuevoJuego);
+				nuevoJuego.addActionListener(new ActionListener() { // Cuando clique mostrara el sistema seleccionado
+					public void actionPerformed(ActionEvent e) {
+//						juego.removeAll();
+//						juego.setVisible(false);
+						Juego juego = new Juego(); // Se crea otra pertida, pero no se porque no se cierra la anterior :(
+					}
+				});
 
 				JMenuItem salir = new JMenuItem("Salir");
 				menuArchivo.add(salir);
@@ -218,30 +220,32 @@ public class Juego extends JFrame {
 					}
 				});
 
+				// Para seleccionar los colores
 				boton = new JButton("Seleccionar");
 				boton.setBounds(209, 59, 115, 30);
 				juego.add(boton);
 				boton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
+						// Bucle para que seleccione 4 colores SI O SI
 						for (int i = 0, x = 615; i < colores.length; i++, x += 30) {
-							color = selector.showDialog(null, "Seleccione un color", null);
-							colores[i] = (color);
+							color = selector.showDialog(null, "Seleccione un color", null); // Selector de colores
+							colores[i] = (color); // Lo guardamos en los arrays correspondientes (TODOS SON NECESARIOS)
 							coloresAux[i] = color;
 							coloresDisponibles[i] = (color);
-							if (colores[i] == null) {
+							if (colores[i] == null) { // Si ese color esta a null, le resta 1 a i con lo que no abanza el bucle
 								i--;
-								x -= 30;
-							} else {
-								respuesta[i] = new JTextArea();
-								respuesta[i].setBounds(x, 110, 20, 20);
+								x -= 30; // Esto es la posicion donde se mostrara, que tambien -30
+							} else { // Si no esta a null...
+								respuesta[i] = new JTextArea(); // Guardamos en un array los TextArea de la solucion
+								respuesta[i].setBounds(x, 110, 20, 20); // Sus cordenadas
 								respuesta[i].setEditable(false); // Para que no se pueda escribir en él
-								respuesta[i].setBackground(colores[i]);
-								respuesta[i].setVisible(false);
+								respuesta[i].setBackground(colores[i]); // El color
+								respuesta[i].setVisible(false); // Para no mostrarlo, solo al final
 								juego.add(respuesta[i]);
 							}
 						}
 
-						// Para randomizar el array
+						// Para randomizar el array de colores disponibles
 						for (int j = 0; j < coloresDisponibles.length; j++) {
 							int index = rnd.nextInt(coloresDisponibles.length);
 							Color temp = coloresDisponibles[j];
@@ -257,6 +261,7 @@ public class Juego extends JFrame {
 							texArea.setBackground(coloresDisponibles[i]);
 							juego.add(texArea);
 						}
+						// Los marquitos de colores disponibles y solucion
 						texto = new JLabel("");
 						texto.setBounds(600, 25, 200, 55);
 						juego.add(texto);
@@ -268,42 +273,37 @@ public class Juego extends JFrame {
 						texto.setBorder(BorderFactory.createTitledBorder("Solución"));
 						juego.remove(boton);
 
+						// Cada uno de los TextArea pusables para cambiar de color
 						cuadrado1 = new JTextArea();
 						cuadrado1.setBounds(10, 10, 24, 24);
 						cuadrado1.setBackground(Color.white);
 						cuadrado1.setBorder(new LineBorder(Color.BLACK, 2));
 						cuadrado1.setEditable(false);
-						cuadrado1.addMouseListener(new MouseListener() {
+						cuadrado1.addMouseListener(new MouseListener() { // Su action listener
 							public void mouseClicked(MouseEvent e) {
-
 								if (e.getButton() == MouseEvent.BUTTON1) {
+									cuadrado1.setBackground(nextColor(num)); // Llama a nextColor
 									num++;
-									cuadrado1.setBackground(nextColor(num));
 								}
-
 								if (e.getButton() == MouseEvent.BUTTON3) {
+									cuadrado1.setBackground(prevColor(num)); // Llama a prevColor
 									num--;
-									cuadrado1.setBackground(prevColor(num));
 								}
-
 							}
-
 							@Override
 							public void mousePressed(MouseEvent e) {
 							}
-
 							@Override
 							public void mouseReleased(MouseEvent e) {
 							}
-
 							@Override
 							public void mouseEntered(MouseEvent e) {
 							}
-
 							@Override
 							public void mouseExited(MouseEvent e) {
 							}
 						});
+							
 
 						cuadrado2 = new JTextArea();
 						cuadrado2.setBounds(40, 10, 24, 24);
@@ -385,19 +385,15 @@ public class Juego extends JFrame {
 						cuadrado4.setEditable(false);
 						cuadrado4.addMouseListener(new MouseListener() {
 							public void mouseClicked(MouseEvent e) {
-
 								if (e.getButton() == MouseEvent.BUTTON1) {
 									num++;
 									cuadrado4.setBackground(nextColor(num));
 								}
-
 								if (e.getButton() == MouseEvent.BUTTON3) {
 									num--;
 									cuadrado4.setBackground(prevColor(num));
 								}
-
 							}
-
 							@Override
 							public void mousePressed(MouseEvent e) {
 							}
@@ -415,18 +411,20 @@ public class Juego extends JFrame {
 							}
 						});
 
+						// Los añadimos al contentPane
 						juego.add(cuadrado1);
 						juego.add(cuadrado2);
 						juego.add(cuadrado3);
 						juego.add(cuadrado4);
 
+						// Boton de comprobar
 						comprobar = new JButton("Comprobar");
 						comprobar.setBounds(140, 10, 100, 24);
 						juego.add(comprobar);
 						comprobar.addActionListener(new ActionListener() {
 							public void actionPerformed(ActionEvent e) {
-
 								int negra = 0, blancas = 0, i;
+								// Recogemos los colores de los TextArea en un array
 								coloresUsuario[0] = cuadrado1.getBackground();
 								coloresUsuario[1] = cuadrado2.getBackground();
 								coloresUsuario[2] = cuadrado3.getBackground();
@@ -435,7 +433,7 @@ public class Juego extends JFrame {
 								// Para ver cuantas negras hay
 								for (i = 0; i < coloresUsuario.length; i++) {
 									if (coloresUsuario[i] == colores[i]) {
-										coloresAux[i] = Color.white;
+										coloresAux[i] = Color.white; // Para que no se repita
 										negra++;
 									}
 								}
@@ -443,25 +441,28 @@ public class Juego extends JFrame {
 								for (i = 0; i < colores.length; i++) {
 									for (int j = 0; j < colores.length; j++) {
 										if (coloresUsuario[i] == coloresAux[j]) {
+											coloresAux[i] = Color.white; // Para que no se repita
 											blancas++;
 										}
 									}
 								}
-
+								// Si son 4 negras ha ganado
 								if (negra == colores.length) {
 									JOptionPane.showMessageDialog(null, "Has ganado");
 									System.exit(0);
-								} else {
-									intentos--;
-									y += 50;
+								} else { // Sino...
+									intentos--; // Restamos un intento
+									y += 50; // Para desplazar abajo las jugadas
+									// Bucle para pintar las bolas negras
 									for (i = 0, x = 260; i < (negra); i++, x += 44) {
-										JTextArea holi = new JTextArea();
+										JTextArea holi = new JTextArea(); 
 										holi.setBounds(x, y, 24, 24);
 										holi.setBackground(Color.black);
 										holi.setBorder(new LineBorder(Color.BLACK, 2));
 										holi.setEditable(false);
 										juego.add(holi);
 									}
+									// Bucle para pintar las bolas blancas
 									for (i = 0, x = 260; i < (blancas); i++, x += 44) {
 										final JTextArea holi = new JTextArea();
 										holi.setBounds(x, y, 24, 24);
@@ -470,6 +471,7 @@ public class Juego extends JFrame {
 										holi.setEditable(false);
 										juego.add(holi);
 									}
+									// Bucle para pintar su jugada
 									for (i = 0, x = 10; i < coloresUsuario.length; i++, x += 30) {
 										final JTextArea holi = new JTextArea();
 										holi.setBounds(x, y, 24, 24);
@@ -478,33 +480,32 @@ public class Juego extends JFrame {
 										holi.setEditable(false);
 										juego.add(holi);
 									}
+									// Si los intentos llegan a 0
 									if (intentos == 0) {
+										// Le mostramos la respuesta
 										for (i = 0; i < coloresUsuario.length; i++) {
 											respuesta[i].setVisible(true);
-                                        }
+										}
+										// Le decimos que ha perdido
 										JOptionPane.showMessageDialog(null, "Has perdido");
-										
-//										System.exit(0);
+										System.exit(0);
 									}
 								}
 							}
 						});
-
 					}
-
 				});
-
 			}
 		};
 
 		aceptar = new JButton("Aceptar");
 		aceptar.setBounds(209, 59, 95, 30);
-		nivel.add(aceptar);
+		juego.add(aceptar);
 		aceptar.addActionListener(al);
 
 		cancelar = new JButton("Cancelar");
 		cancelar.setBounds(209, 111, 95, 30);
-		nivel.add(cancelar);
+		juego.add(cancelar);
 		cancelar.addActionListener(al);
 	}
 }
