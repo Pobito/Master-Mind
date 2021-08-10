@@ -18,7 +18,6 @@ public class Juego extends JFrame {
 	private JPanel juego;
 	private JColorChooser selector;
 	private Color color;
-	private JScrollPane scroll;
 	private JButton boton, aceptar, cancelar, comprobar;
 	private JRadioButton opcion1, opcion2, opcion3;
 	private ButtonGroup grupo;
@@ -28,7 +27,7 @@ public class Juego extends JFrame {
 	private Color[] colores = new Color[4]; // Colores de la solucion
 	private Color[] coloresDisponibles;
 	private Color[] coloresUsuario = new Color[4];
-	private Color[] coloresAux;
+	private Color[] coloresAux = new Color[4];
 	private int num = 0, x, y = 10, intentos;
 
 	public Color nextColor(int index) {
@@ -48,12 +47,18 @@ public class Juego extends JFrame {
 			return coloresDisponibles[num];
 		}
 	}
+	
+	// Cierra la ventana pero no para la ejecucion UwU
+	public void cerrarVentana() {
+		this.dispose();
+	}
 
 	public Juego() {
 		setTitle("Juego");
 		setBounds(100, 100, 850, 500);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
+		juego = null;
 		juego = new JPanel();
 		juego.setLayout(null);
 		setContentPane(juego);
@@ -81,23 +86,17 @@ public class Juego extends JFrame {
 				// nivel Medio
 				if (opcion2.isSelected()) {
 					coloresDisponibles = new Color[5]; // Array con 5 colores disponible
-					coloresAux = new Color[5]; // Array para mezclarlos 
 					coloresDisponibles[4] = new Color(rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256)); // Generamos un color random
-					coloresAux[4] = coloresDisponibles[4];
 					intentos = 8; // Num de intentos
-				// Nivel avanzado
+					// Nivel avanzado
 				} else if (opcion3.isSelected()) {
 					coloresDisponibles = new Color[6];
-					coloresAux = new Color[6];
 					coloresDisponibles[4] = new Color(rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
-					coloresAux[4] = coloresDisponibles[4];
 					coloresDisponibles[5] = new Color(rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
-					coloresAux[5] = coloresDisponibles[5];
 					intentos = 6;
-				// Nivel principiante (por defecto)
+					// Nivel principiante (por defecto)
 				} else {
 					coloresDisponibles = new Color[4];
-					coloresAux = new Color[4];
 					intentos = 10;
 				}
 
@@ -114,9 +113,8 @@ public class Juego extends JFrame {
 				menuArchivo.add(nuevoJuego);
 				nuevoJuego.addActionListener(new ActionListener() { // Cuando clique mostrara el sistema seleccionado
 					public void actionPerformed(ActionEvent e) {
-//						juego.removeAll();
-//						juego.setVisible(false);
-						Juego juego = new Juego(); // Se crea otra pertida, pero no se porque no se cierra la anterior :(
+						cerrarVentana(); // Para cerrar la ventana del juego
+						Juego juego = new Juego(); // Se crea otra pertida
 					}
 				});
 
@@ -232,7 +230,8 @@ public class Juego extends JFrame {
 							colores[i] = (color); // Lo guardamos en los arrays correspondientes (TODOS SON NECESARIOS)
 							coloresAux[i] = color;
 							coloresDisponibles[i] = (color);
-							if (colores[i] == null) { // Si ese color esta a null, le resta 1 a i con lo que no abanza el bucle
+							if (colores[i] == null) { // Si ese color esta a null, le resta 1 a i con lo que no abanza
+														// el bucle
 								i--;
 								x -= 30; // Esto es la posicion donde se mostrara, que tambien -30
 							} else { // Si no esta a null...
@@ -286,24 +285,28 @@ public class Juego extends JFrame {
 									num++;
 								}
 								if (e.getButton() == MouseEvent.BUTTON3) {
-									cuadrado1.setBackground(prevColor(num)); // Llama a prevColor
 									num--;
+									cuadrado1.setBackground(prevColor(num)); // Llama a prevColor
+									
 								}
 							}
+
 							@Override
 							public void mousePressed(MouseEvent e) {
 							}
+
 							@Override
 							public void mouseReleased(MouseEvent e) {
 							}
+
 							@Override
 							public void mouseEntered(MouseEvent e) {
 							}
+
 							@Override
 							public void mouseExited(MouseEvent e) {
 							}
 						});
-							
 
 						cuadrado2 = new JTextArea();
 						cuadrado2.setBounds(40, 10, 24, 24);
@@ -314,8 +317,8 @@ public class Juego extends JFrame {
 							public void mouseClicked(MouseEvent e) {
 
 								if (e.getButton() == MouseEvent.BUTTON1) {
-									num++;
 									cuadrado2.setBackground(nextColor(num));
+									num++;
 								}
 
 								if (e.getButton() == MouseEvent.BUTTON3) {
@@ -350,8 +353,8 @@ public class Juego extends JFrame {
 							public void mouseClicked(MouseEvent e) {
 
 								if (e.getButton() == MouseEvent.BUTTON1) {
-									num++;
 									cuadrado3.setBackground(nextColor(num));
+									num++;
 								}
 
 								if (e.getButton() == MouseEvent.BUTTON3) {
@@ -386,14 +389,15 @@ public class Juego extends JFrame {
 						cuadrado4.addMouseListener(new MouseListener() {
 							public void mouseClicked(MouseEvent e) {
 								if (e.getButton() == MouseEvent.BUTTON1) {
-									num++;
 									cuadrado4.setBackground(nextColor(num));
+									num++;
 								}
 								if (e.getButton() == MouseEvent.BUTTON3) {
 									num--;
 									cuadrado4.setBackground(prevColor(num));
 								}
 							}
+
 							@Override
 							public void mousePressed(MouseEvent e) {
 							}
@@ -423,7 +427,12 @@ public class Juego extends JFrame {
 						juego.add(comprobar);
 						comprobar.addActionListener(new ActionListener() {
 							public void actionPerformed(ActionEvent e) {
+								
 								int negra = 0, blancas = 0, i;
+								
+								for (i = 0; i < respuesta.length; i++) {
+									coloresAux[i] = respuesta[i].getBackground();
+								}
 								// Recogemos los colores de los TextArea en un array
 								coloresUsuario[0] = cuadrado1.getBackground();
 								coloresUsuario[1] = cuadrado2.getBackground();
@@ -441,7 +450,6 @@ public class Juego extends JFrame {
 								for (i = 0; i < colores.length; i++) {
 									for (int j = 0; j < colores.length; j++) {
 										if (coloresUsuario[i] == coloresAux[j]) {
-											coloresAux[i] = Color.white; // Para que no se repita
 											blancas++;
 										}
 									}
@@ -455,7 +463,7 @@ public class Juego extends JFrame {
 									y += 50; // Para desplazar abajo las jugadas
 									// Bucle para pintar las bolas negras
 									for (i = 0, x = 260; i < (negra); i++, x += 44) {
-										JTextArea holi = new JTextArea(); 
+										JTextArea holi = new JTextArea();
 										holi.setBounds(x, y, 24, 24);
 										holi.setBackground(Color.black);
 										holi.setBorder(new LineBorder(Color.BLACK, 2));
@@ -463,7 +471,7 @@ public class Juego extends JFrame {
 										juego.add(holi);
 									}
 									// Bucle para pintar las bolas blancas
-									for (i = 0, x = 260; i < (blancas); i++, x += 44) {
+									for (i = 0; i < (blancas); i++, x += 44) {
 										final JTextArea holi = new JTextArea();
 										holi.setBounds(x, y, 24, 24);
 										holi.setBackground(Color.white);
