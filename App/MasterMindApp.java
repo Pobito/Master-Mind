@@ -1,11 +1,6 @@
 package App;
 
-
-import java.util.Arrays;
-import java.util.Random;
-
 import dto.Juego;
-import dto.PictureBox;
 
 public class MasterMindApp {
 
